@@ -1,1 +1,52 @@
-# chau
+```mermaid
+graph TD
+    A[Start: Determine Ticket Display Status] --> B{What is the Event Stage?};
+    B -- DRAFT --> C[Event is DRAFT];
+    C --> C1[Edit Page: Status is ON HOLD];
+    C --> C2[Stafftools: Status is ON HOLD];
+    C --> C_End([End Draft Logic]);
+    B -- PUBLISHED --> D[Event is PUBLISHED];
+    D --> D1{Ticket Sale Start Type?};
+    D1 -- Custom Start Sale --> D2[Edit Page: Status is ON HOLD];
+    D2 --> D3[Stafftools: Status is ON HOLD];
+    D3 --> D4[Event Page: Status is ON HOLD];
+    D4 --> D_End_Custom([End Published - Custom Sale Logic]);
+    D1 -- Default Start Sale --> D5[Edit Page: Status is ON SALE];
+    D5 --> D6[Stafftools: Status is ON SALE];
+    D6 --> D7[Event Page: Status is ON SALE];
+    D7 --> D_End_Default([End Published - Default Sale Logic]);
+    B -- CANCELLED --> E[Event is CANCELLED];
+    E --> E1[Edit Page: Show Nothing (status is not 'On Sale')];
+    E --> E2[Stafftools: All ticket statuses are CANCELLED];
+    E --> E3[Event Page: No Event Page displayed];
+    E3 --> E_End([End Cancelled Logic]);
+    B -- SOLD OUT --> F[Event is SOLD OUT];
+    F --> F1[Edit Page: Status is SALE END (for all tickets)];
+    F --> F2[Stafftools: All ticket statuses are SOLD OUT];
+    F --> F3[Event Page: All ticket statuses are SALE CLOSED];
+    F3 --> F_End([End Sold Out Logic]);
+    B -- SUSPENDED --> G[Event is SUSPENDED];
+    G --> G1{Ticket Sale Start Type?};
+    G1 -- Custom Sale Start --> G2[Edit Page: Status is ON HOLD];
+    G2 --> G3[Stafftools: Status is ON HOLD];
+    G3 --> G_Common_Suspended[Common Suspended Event Page Logic];
+    G1 -- Default Sale Start --> G4[Edit Page: Status is ON SALE];
+    G4 --> G5[Stafftools: Status is ON SALE];
+    G5 --> G_Common_Suspended;
+    G_Common_Suspended --> G6[Event Page: All ticket statuses are NONE];
+    G6 --> G7[Event Page: 'Ticket Suspended' button replaces 'Get Ticket' button];
+    G7 --> G_End([End Suspended Logic]);
+    B -- FINISHED --> H[Event is FINISHED];
+    H --> H1{Ticket Sale Start Type?};
+    H1 -- Custom Sale Start (Tickets were ON HOLD) --> H2[Edit Page: Status is ON HOLD];
+    H2 --> H3[Stafftools: Status is ON HOLD];
+    H3 --> H4[Event Page: ON HOLD tickets displayed with NO STATUS];
+    H4 --> H_Common_Finished[Common Finished Event Page Logic];
+    H1 -- Default Sale Start (Tickets were ON SALE) --> H5[Edit Page: Status is ON SALE];
+    H5 --> H6[Stafftools: Status is ON SALE];
+    H6 --> H7[Event Page: ON SALE tickets displayed with SALE CLOSED status];
+    H7 --> H_Common_Finished;
+    H_Common_Finished --> H8[Event Page: No 'Get Ticket' button displayed];
+    H8 --> H_End([End Finished Logic]);
+```
+Add ticket status flowchart"
